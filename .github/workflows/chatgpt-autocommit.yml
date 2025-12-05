@@ -1,0 +1,30 @@
+name: ChatGPT AutoCommit Integration
+
+on:
+  workflow_dispatch:
+    inputs:
+      instructions:
+        description: "Instrucciones para que ChatGPT modifique el repositorio"
+        required: true
+        type: string
+
+jobs:
+  chatgpt_update:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Run ChatGPT Action
+      uses: openai/chatgpt-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        instructions: ${{ github.event.inputs.instructions }}
